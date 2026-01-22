@@ -5,7 +5,6 @@ public class Jarvis {
         String name = "Jarvis";
         String horizontalLine = "____________________________________________________________";
 
-        // Use the Task class array instead of String array
         Task[] tasks = new Task[100];
         int taskCount = 0;
 
@@ -23,27 +22,46 @@ public class Jarvis {
             if (command.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    // Display status icon [X] or [ ]
-                    System.out.println((i + 1) + ".[" + tasks[i].getStatusIcon() + "] " + tasks[i].description);
+                    System.out.println((i + 1) + "." + tasks[i].toString());
                 }
             } else if (command.startsWith("mark")) {
-                // Extract the number (e.g., "mark 2" -> 2)
                 int index = Integer.parseInt(command.split(" ")[1]) - 1;
                 tasks[index].markAsDone();
-
                 System.out.println("Nice! I've marked this task as done:");
-                System.out.println("  [" + tasks[index].getStatusIcon() + "] " + tasks[index].description);
+                System.out.println("  " + tasks[index].toString());
             } else if (command.startsWith("unmark")) {
                 int index = Integer.parseInt(command.split(" ")[1]) - 1;
                 tasks[index].markAsNotDone();
-
                 System.out.println("OK, I've marked this task as not done yet:");
-                System.out.println("  [" + tasks[index].getStatusIcon() + "] " + tasks[index].description);
-            } else {
-                // Create a new Task object
-                tasks[taskCount] = new Task(command);
+                System.out.println("  " + tasks[index].toString());
+            } else if (command.startsWith("todo")) {
+                String description = command.substring(5); // Remove "todo "
+                tasks[taskCount] = new Todo(description);
                 taskCount++;
-                System.out.println("added: " + command);
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  " + tasks[taskCount - 1].toString());
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
+            } else if (command.startsWith("deadline")) {
+                // Format: deadline return book /by Sunday
+                String[] parts = command.substring(9).split(" /by ");
+                tasks[taskCount] = new Deadline(parts[0], parts[1]);
+                taskCount++;
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  " + tasks[taskCount - 1].toString());
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
+            } else if (command.startsWith("event")) {
+                // Format: event project meeting /from Mon 2pm /to 4pm
+                String[] parts = command.substring(6).split(" /from ");
+                String description = parts[0];
+                String[] timeParts = parts[1].split(" /to ");
+                String from = timeParts[0];
+                String to = timeParts[1];
+
+                tasks[taskCount] = new Event(description, from, to);
+                taskCount++;
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  " + tasks[taskCount - 1].toString());
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
             }
 
             System.out.println(horizontalLine);
@@ -57,7 +75,7 @@ public class Jarvis {
     }
 }
 
-// The new Task Class (Blueprint for a task)
+// Parent Class
 class Task {
     protected String description;
     protected boolean isDone;
@@ -68,7 +86,7 @@ class Task {
     }
 
     public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
+        return (isDone ? "X" : " ");
     }
 
     public void markAsDone() {
@@ -77,5 +95,53 @@ class Task {
 
     public void markAsNotDone() {
         this.isDone = false;
+    }
+
+    public String toString() {
+        return "[" + getStatusIcon() + "] " + description;
+    }
+}
+
+// Child Class: Todo
+class Todo extends Task {
+    public Todo(String description) {
+        super(description);
+    }
+
+    @Override
+    public String toString() {
+        return "[T]" + super.toString();
+    }
+}
+
+// Child Class: Deadline
+class Deadline extends Task {
+    protected String by;
+
+    public Deadline(String description, String by) {
+        super(description);
+        this.by = by;
+    }
+
+    @Override
+    public String toString() {
+        return "[D]" + super.toString() + " (by: " + by + ")";
+    }
+}
+
+// Child Class: Event
+class Event extends Task {
+    protected String from;
+    protected String to;
+
+    public Event(String description, String from, String to) {
+        super(description);
+        this.from = from;
+        this.to = to;
+    }
+
+    @Override
+    public String toString() {
+        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
     }
 }
