@@ -5,22 +5,36 @@ public class Jarvis {
         String name = "Jarvis";
         String horizontalLine = "____________________________________________________________";
 
+        // Task storage (Simple array for Level-2)
+        String[] tasks = new String[100];
+        int taskCount = 0;
+
         // Greet
         System.out.println(horizontalLine);
         System.out.println("Hello! I'm " + name);
         System.out.println("What can I do for you?");
         System.out.println(horizontalLine);
 
-        Scanner scanner = new Scanner(System.in); // Create a Scanner object
-        String command = scanner.nextLine(); // Read the first line of input
+        Scanner scanner = new Scanner(System.in);
+        String command = scanner.nextLine();
 
-        // Loop: Keep reading input until the user types "bye"
         while (!command.equals("bye")) {
             System.out.println(horizontalLine);
-            System.out.println(command); // Echo the command
-            System.out.println(horizontalLine);
 
-            command = scanner.nextLine(); // Read the next line
+            if (command.equals("list")) {
+                // Display the list
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println((i + 1) + ". " + tasks[i]);
+                }
+            } else {
+                // Add to list
+                tasks[taskCount] = command;
+                taskCount++;
+                System.out.println("added: " + command);
+            }
+
+            System.out.println(horizontalLine);
+            command = scanner.nextLine();
         }
 
         // Exit
