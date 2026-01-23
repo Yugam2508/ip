@@ -5,6 +5,7 @@ public class Jarvis {
         String name = "Jarvis";
         String horizontalLine = "____________________________________________________________";
 
+        // Task storage
         Task[] tasks = new Task[100];
         int taskCount = 0;
 
@@ -19,49 +20,78 @@ public class Jarvis {
         while (!command.equals("bye")) {
             System.out.println(horizontalLine);
 
-            if (command.equals("list")) {
-                System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + "." + tasks[i].toString());
-                }
-            } else if (command.startsWith("mark")) {
-                int index = Integer.parseInt(command.split(" ")[1]) - 1;
-                tasks[index].markAsDone();
-                System.out.println("Nice! I've marked this task as done:");
-                System.out.println("  " + tasks[index].toString());
-            } else if (command.startsWith("unmark")) {
-                int index = Integer.parseInt(command.split(" ")[1]) - 1;
-                tasks[index].markAsNotDone();
-                System.out.println("OK, I've marked this task as not done yet:");
-                System.out.println("  " + tasks[index].toString());
-            } else if (command.startsWith("todo")) {
-                String description = command.substring(5); // Remove "todo "
-                tasks[taskCount] = new Todo(description);
-                taskCount++;
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + tasks[taskCount - 1].toString());
-                System.out.println("Now you have " + taskCount + " tasks in the list.");
-            } else if (command.startsWith("deadline")) {
-                // Format: deadline return book /by Sunday
-                String[] parts = command.substring(9).split(" /by ");
-                tasks[taskCount] = new Deadline(parts[0], parts[1]);
-                taskCount++;
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + tasks[taskCount - 1].toString());
-                System.out.println("Now you have " + taskCount + " tasks in the list.");
-            } else if (command.startsWith("event")) {
-                // Format: event project meeting /from Mon 2pm /to 4pm
-                String[] parts = command.substring(6).split(" /from ");
-                String description = parts[0];
-                String[] timeParts = parts[1].split(" /to ");
-                String from = timeParts[0];
-                String to = timeParts[1];
+            try {
+                // We split the command logic into a try-block to catch errors
+                if (command.equals("list")) {
+                    System.out.println("Here are the tasks in your list:");
+                    for (int i = 0; i < taskCount; i++) {
+                        System.out.println((i + 1) + "." + tasks[i].toString());
+                    }
 
-                tasks[taskCount] = new Event(description, from, to);
-                taskCount++;
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + tasks[taskCount - 1].toString());
-                System.out.println("Now you have " + taskCount + " tasks in the list.");
+                } else if (command.startsWith("mark")) {
+                    int index = Integer.parseInt(command.split(" ")[1]) - 1;
+                    tasks[index].markAsDone();
+                    System.out.println("Nice! I've marked this task as done:");
+                    System.out.println("  " + tasks[index].toString());
+
+                } else if (command.startsWith("unmark")) {
+                    int index = Integer.parseInt(command.split(" ")[1]) - 1;
+                    tasks[index].markAsNotDone();
+                    System.out.println("OK, I've marked this task as not done yet:");
+                    System.out.println("  " + tasks[index].toString());
+
+                } else if (command.startsWith("todo")) {
+                    // VALIDATION: Check if description is missing
+                    if (command.trim().equals("todo")) {
+                        throw new JarvisException("OOPS!!! The description of a todo cannot be empty.");
+                    }
+
+                    String description = command.substring(5);
+                    tasks[taskCount] = new Todo(description);
+                    taskCount++;
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + tasks[taskCount - 1].toString());
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+
+                } else if (command.startsWith("deadline")) {
+                    // VALIDATION: Check if description is missing
+                    if (command.trim().equals("deadline")) {
+                        throw new JarvisException("OOPS!!! The description of a deadline cannot be empty.");
+                    }
+
+                    String[] parts = command.substring(9).split(" /by ");
+                    tasks[taskCount] = new Deadline(parts[0], parts[1]);
+                    taskCount++;
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + tasks[taskCount - 1].toString());
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+
+                } else if (command.startsWith("event")) {
+                    // VALIDATION: Check if description is missing
+                    if (command.trim().equals("event")) {
+                        throw new JarvisException("OOPS!!! The description of an event cannot be empty.");
+                    }
+
+                    String[] parts = command.substring(6).split(" /from ");
+                    String description = parts[0];
+                    String[] timeParts = parts[1].split(" /to ");
+                    tasks[taskCount] = new Event(description, timeParts[0], timeParts[1]);
+                    taskCount++;
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + tasks[taskCount - 1].toString());
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+
+                } else {
+                    // UNKNOWN COMMAND: Throw exception
+                    throw new JarvisException("OOPS!!! I'm sorry, but I don't know what that means :-(");
+                }
+
+            } catch (JarvisException e) {
+                // This block handles OUR custom errors
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                // This block handles unexpected Java errors (like crashing on index -1)
+                System.out.println("OOPS!!! Something went wrong: " + e.getMessage());
             }
 
             System.out.println(horizontalLine);
@@ -74,6 +104,19 @@ public class Jarvis {
         scanner.close();
     }
 }
+
+// ------------------------------------
+// Custom Exception Class (New for Level 5)
+// ------------------------------------
+class JarvisException extends Exception {
+    public JarvisException(String message) {
+        super(message);
+    }
+}
+
+// ------------------------------------
+// Task Classes (Same as Level 4)
+// ------------------------------------
 
 // Parent Class
 class Task {
