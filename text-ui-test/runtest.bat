@@ -2,7 +2,7 @@
 chcp 65001 > nul
 
 echo ===============================================
-echo                Duke Test Runner                
+echo                Jarvis Test Runner
 echo ===============================================
 echo.
 
@@ -47,7 +47,7 @@ javac -cp ..\src\main\java -Xlint:none -d ..\bin ..\src\main\java\*.java
 IF ERRORLEVEL 1 (
     echo.
     echo =============== ERROR ===============
-    echo         BUILD FAILURE              
+    echo         BUILD FAILURE
     echo ===================================
     exit /b 1
 )
@@ -56,18 +56,20 @@ echo [√] Compilation successful
 echo.
 
 echo [4/4] Running tests...
-java -classpath ..\bin Duke < input.txt > ACTUAL.TXT
+REM Changed Duke to Jarvis below
+java -classpath ..\bin Jarvis < input.txt > ACTUAL.TXT
 
 FC ACTUAL.TXT EXPECTED.TXT > nul
 if ERRORLEVEL 1 (
     echo.
     echo =============== ERROR ===============
-    echo           Tests FAILED             
+    echo           Tests FAILED
     echo ===================================
     exit /b 1
 ) else (
     echo.
     echo ============= SUCCESS ==============
-    echo         All tests passed           
+    echo         All tests passed
     echo ===================================
     exit /b 0
+)
