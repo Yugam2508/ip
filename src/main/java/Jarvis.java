@@ -21,7 +21,6 @@ public class Jarvis {
             System.out.println(horizontalLine);
 
             try {
-                // We split the command logic into a try-block to catch errors
                 if (command.equals("list")) {
                     System.out.println("Here are the tasks in your list:");
                     for (int i = 0; i < taskCount; i++) {
@@ -40,12 +39,34 @@ public class Jarvis {
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println("  " + tasks[index].toString());
 
+                } else if (command.startsWith("delete")) {
+                    // ---------------------------------------
+                    // LEVEL 6 FEATURE: DELETE
+                    // ---------------------------------------
+                    int index = Integer.parseInt(command.split(" ")[1]) - 1;
+
+                    // Check if index is valid
+                    if (index < 0 || index >= taskCount) {
+                        throw new JarvisException("OOPS!!! The task index provided is invalid.");
+                    }
+
+                    Task removedTask = tasks[index];
+
+                    // Shift tasks to the left to fill the gap
+                    for (int i = index; i < taskCount - 1; i++) {
+                        tasks[i] = tasks[i + 1];
+                    }
+
+                    taskCount--; // Decrease the count
+
+                    System.out.println("Noted. I've removed this task:");
+                    System.out.println("  " + removedTask.toString());
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+
                 } else if (command.startsWith("todo")) {
-                    // VALIDATION: Check if description is missing
                     if (command.trim().equals("todo")) {
                         throw new JarvisException("OOPS!!! The description of a todo cannot be empty.");
                     }
-
                     String description = command.substring(5);
                     tasks[taskCount] = new Todo(description);
                     taskCount++;
@@ -54,11 +75,9 @@ public class Jarvis {
                     System.out.println("Now you have " + taskCount + " tasks in the list.");
 
                 } else if (command.startsWith("deadline")) {
-                    // VALIDATION: Check if description is missing
                     if (command.trim().equals("deadline")) {
                         throw new JarvisException("OOPS!!! The description of a deadline cannot be empty.");
                     }
-
                     String[] parts = command.substring(9).split(" /by ");
                     tasks[taskCount] = new Deadline(parts[0], parts[1]);
                     taskCount++;
@@ -67,11 +86,9 @@ public class Jarvis {
                     System.out.println("Now you have " + taskCount + " tasks in the list.");
 
                 } else if (command.startsWith("event")) {
-                    // VALIDATION: Check if description is missing
                     if (command.trim().equals("event")) {
                         throw new JarvisException("OOPS!!! The description of an event cannot be empty.");
                     }
-
                     String[] parts = command.substring(6).split(" /from ");
                     String description = parts[0];
                     String[] timeParts = parts[1].split(" /to ");
@@ -82,15 +99,12 @@ public class Jarvis {
                     System.out.println("Now you have " + taskCount + " tasks in the list.");
 
                 } else {
-                    // UNKNOWN COMMAND: Throw exception
                     throw new JarvisException("OOPS!!! I'm sorry, but I don't know what that means :-(");
                 }
 
             } catch (JarvisException e) {
-                // This block handles OUR custom errors
                 System.out.println(e.getMessage());
             } catch (Exception e) {
-                // This block handles unexpected Java errors (like crashing on index -1)
                 System.out.println("OOPS!!! Something went wrong: " + e.getMessage());
             }
 
@@ -106,7 +120,7 @@ public class Jarvis {
 }
 
 // ------------------------------------
-// Custom Exception Class (New for Level 5)
+// Custom Exception
 // ------------------------------------
 class JarvisException extends Exception {
     public JarvisException(String message) {
@@ -115,10 +129,8 @@ class JarvisException extends Exception {
 }
 
 // ------------------------------------
-// Task Classes (Same as Level 4)
+// Task Classes (Unchanged)
 // ------------------------------------
-
-// Parent Class
 class Task {
     protected String description;
     protected boolean isDone;
@@ -145,7 +157,6 @@ class Task {
     }
 }
 
-// Child Class: Todo
 class Todo extends Task {
     public Todo(String description) {
         super(description);
@@ -157,7 +168,6 @@ class Todo extends Task {
     }
 }
 
-// Child Class: Deadline
 class Deadline extends Task {
     protected String by;
 
@@ -172,7 +182,6 @@ class Deadline extends Task {
     }
 }
 
-// Child Class: Event
 class Event extends Task {
     protected String from;
     protected String to;
