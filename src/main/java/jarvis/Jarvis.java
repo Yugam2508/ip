@@ -1,8 +1,10 @@
+package jarvis;
+
 import java.io.FileNotFoundException;
 
 /**
- * Jarvis is a personal assistant chatbot that helps users track tasks.
- * It supports ToDo, Deadline, and Event tasks, and saves data to a local file.
+ * jarvis.Jarvis is a personal assistant chatbot that helps users track tasks.
+ * It supports ToDo, jarvis.Deadline, and jarvis.Event tasks, and saves data to a local file.
  */
 
 public class Jarvis {

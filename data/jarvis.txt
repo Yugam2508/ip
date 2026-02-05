@@ -1,2 +1,1 @@
-T | 1 | read
 D | 0 | finish homework | Sunday
