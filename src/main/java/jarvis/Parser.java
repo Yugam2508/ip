@@ -1,3 +1,5 @@
+package jarvis;
+
 public class Parser {
     public static CommandType parseCommand(String userInput) {
         String commandWord = userInput.split(" ")[0].toUpperCase();

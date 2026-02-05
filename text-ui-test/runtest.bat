@@ -2,7 +2,7 @@
 chcp 65001 > nul
 
 echo ===============================================
-echo                Jarvis Test Runner
+echo                jarvis.Jarvis Test Runner
 echo ===============================================
 echo.
 
@@ -43,7 +43,7 @@ if exist ACTUAL.TXT (
 
 echo.
 echo [3/4] Compiling source files...
-javac -cp ..\src\main\java -Xlint:none -d ..\bin ..\src\main\java\*.java
+javac -cp ..\src\main\java -Xlint:none -d ..\bin ..\src\main\java\jarvis\*.java
 IF ERRORLEVEL 1 (
     echo.
     echo =============== ERROR ===============
@@ -56,8 +56,8 @@ echo [√] Compilation successful
 echo.
 
 echo [4/4] Running tests...
-REM Changed Duke to Jarvis below
-java -classpath ..\bin Jarvis < input.txt > ACTUAL.TXT
+REM Changed Duke to jarvis.Jarvis below
+java -classpath ..\bin jarvis.Jarvis < input.txt > ACTUAL.TXT
 
 FC ACTUAL.TXT EXPECTED.TXT > nul
 if ERRORLEVEL 1 (
