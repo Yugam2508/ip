@@ -1,1 +1,3 @@
 T | 0 | read
+D | 0 | return book | 2025-12-02
+D | 0 | finish homework | Sunday
