@@ -50,4 +50,19 @@ public class Ui {
     public void showLoadingError() {
         System.out.println("OOPS!!! Problem loading file. Starting with empty list.");
     }
+
+    public void showFindResults(java.util.ArrayList<Task> tasks) {
+        if (tasks.isEmpty()) {
+            System.out.println("____________________________________________________________");
+            System.out.println(" No matching tasks found.");
+            System.out.println("____________________________________________________________");
+        } else {
+            System.out.println("____________________________________________________________");
+            System.out.println(" Here are the matching tasks in your list:");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println(" " + (i + 1) + "." + tasks.get(i));
+            }
+            System.out.println("____________________________________________________________");
+        }
+    }
 }

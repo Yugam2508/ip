@@ -3,7 +3,7 @@ package jarvis;
 import java.util.ArrayList;
 
 public class TaskList {
-    private ArrayList<Task> tasks;
+    private static ArrayList<Task> tasks;
 
     public TaskList() {
         this.tasks = new ArrayList<>();
@@ -39,5 +39,15 @@ public class TaskList {
     // Helper to give access to the raw list for storage
     public ArrayList<Task> getAllTasks() {
         return tasks;
+    }
+
+    public static java.util.ArrayList<Task> findTasks(String keyword) {
+        java.util.ArrayList<Task> matchingTasks = new java.util.ArrayList<>();
+        for (Task task : tasks) {
+            if (task.toString().contains(keyword)) {
+                matchingTasks.add(task);
+            }
+        }
+        return matchingTasks;
     }
 }

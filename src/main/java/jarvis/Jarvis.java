@@ -86,7 +86,16 @@ public class Jarvis {
                         storage.save(tasks.getAllTasks());
                         break;
                     case FIND:
-                        // For level-9
+                        String[] fParts = fullCommand.split(" ", 2);
+                        if (fParts.length < 2 || fParts[1].trim().isEmpty()) {
+                            ui.showError("The search keyword cannot be empty.");
+                        } else {
+                            String keyword = fParts[1].trim();
+                            // Search for tasks
+                            java.util.ArrayList<Task> foundTasks = TaskList.findTasks(keyword);
+                            // Display results
+                            ui.showFindResults(foundTasks);
+                        }
                         break;
                     default:
                         throw new JarvisException("OOPS!!! I'm sorry, but I don't know what that means :-(");
