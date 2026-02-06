@@ -1,4 +1,4 @@
-package jarvis;
+package jarvis.tasks;
 
 public class Task {
     protected String description;

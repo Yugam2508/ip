@@ -1,5 +1,7 @@
 package jarvis;
 
+import jarvis.parser.CommandType;
+import jarvis.parser.Parser;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

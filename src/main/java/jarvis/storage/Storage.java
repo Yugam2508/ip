@@ -1,4 +1,9 @@
-package jarvis;
+package jarvis.storage;
+
+import jarvis.tasks.Deadline;
+import jarvis.tasks.Event;
+import jarvis.tasks.Task;
+import jarvis.tasks.Todo;
 
 import java.io.File;
 import java.io.FileNotFoundException;

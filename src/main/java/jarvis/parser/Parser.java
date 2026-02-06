@@ -1,4 +1,4 @@
-package jarvis;
+package jarvis.parser;
 
 public class Parser {
     public static CommandType parseCommand(String userInput) {

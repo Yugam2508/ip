@@ -1,4 +1,6 @@
-package jarvis;
+package jarvis.ui;
+
+import jarvis.tasks.Task;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package jarvis;
+package jarvis.parser;
 
 /**
  * Enum to represent the various commands the user can input.

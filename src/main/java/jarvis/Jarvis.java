@@ -1,10 +1,16 @@
 package jarvis;
 
+import jarvis.parser.CommandType;
+import jarvis.parser.Parser;
+import jarvis.storage.Storage;
+import jarvis.tasks.*;
+import jarvis.ui.Ui;
+
 import java.io.FileNotFoundException;
 
 /**
  * jarvis.Jarvis is a personal assistant chatbot that helps users track tasks.
- * It supports ToDo, jarvis.Deadline, and jarvis.Event tasks, and saves data to a local file.
+ * It supports ToDo, jarvis.tasks.Deadline, and jarvis.tasks.Event tasks, and saves data to a local file.
  */
 
 public class Jarvis {
