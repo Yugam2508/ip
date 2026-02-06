@@ -1,0 +1,4 @@
+Debugging is like being the detective in a crime movie where you are also the murderer.
+It works on my machine!
+Code is like humor. When you have to explain it, it’s bad.
+Keep calm and commit often.
