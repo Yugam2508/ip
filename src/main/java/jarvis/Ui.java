@@ -2,6 +2,10 @@ package jarvis;
 
 import java.util.Scanner;
 
+/**
+ * Ui class handles all user interaction.
+ */
+
 public class Ui {
     private static final String HORIZONTAL_LINE = "____________________________________________________________";
     private Scanner scanner;
@@ -10,6 +14,10 @@ public class Ui {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Reads the next line of input from the user.
+     * @return The command string entered by the user.
+     */
     public String readCommand() {
         return scanner.nextLine();
     }

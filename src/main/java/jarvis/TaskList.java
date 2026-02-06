@@ -2,6 +2,10 @@ package jarvis;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the list of tasks and handles operations like adding or deleting.
+ */
+
 public class TaskList {
     private static ArrayList<Task> tasks;
 
