@@ -12,6 +12,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Manages the loading and saving of task data to the hard disk.
+ */
+
 public class Storage {
     private String filePath;
 
@@ -51,6 +55,11 @@ public class Storage {
         }
         return tasks;
     }
+
+    /**
+     * Saves the current list of tasks to the file.
+     * @param tasks The list of tasks to save.
+     */
 
     public void save(ArrayList<Task> tasks) {
         try {
