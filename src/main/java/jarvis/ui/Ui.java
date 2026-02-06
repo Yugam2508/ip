@@ -75,4 +75,10 @@ public class Ui {
             System.out.println("____________________________________________________________");
         }
     }
+    public void printCheer(String quote) {
+        System.out.println("____________________________________________________________");
+        System.out.println(" Hey! Here is a quote for you:");
+        System.out.println(" \"" + quote + "\"");
+        System.out.println("____________________________________________________________");
+    }
 }

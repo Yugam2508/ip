@@ -103,6 +103,9 @@ public class Jarvis {
                             ui.showFindResults(foundTasks);
                         }
                         break;
+                    case CHEER:
+                        ui.printCheer(getRandomQuote());
+                        break;
                     default:
                         throw new JarvisException("OOPS!!! I'm sorry, but I don't know what that means :-(");
                 }
@@ -114,6 +117,19 @@ public class Jarvis {
             ui.showLine();
         }
         ui.showExit();
+    }
+
+    private String getRandomQuote() {
+        try {
+            java.util.List<String> lines = java.nio.file.Files.readAllLines(java.nio.file.Paths.get("data/cheer.txt"));
+            if (lines.isEmpty()) {
+                return "You can do it!";
+            }
+            int randomIndex = new java.util.Random().nextInt(lines.size());
+            return lines.get(randomIndex);
+        } catch (java.io.IOException e) {
+            return "Keep pushing forward! (Could not read quote file)";
+        }
     }
 
     public static void main(String[] args) {
