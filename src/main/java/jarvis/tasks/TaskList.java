@@ -1,20 +1,30 @@
 package jarvis.tasks;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Represents the list of tasks and handles operations like adding or deleting.
+ * Represents a list of tasks and provides operations on the list.
  */
-
 public class TaskList {
-    private static ArrayList<Task> tasks;
 
+    private final List<Task> tasks;
+
+    /**
+     * Creates an empty TaskList.
+     */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
-    public TaskList(ArrayList<Task> tasks) {
-        this.tasks = tasks;
+    /**
+     * Creates a TaskList with preloaded tasks.
+     *
+     * @param tasks Initial list of tasks.
+     */
+    public TaskList(List<Task> tasks) {
+        this.tasks = new ArrayList<>(tasks);
     }
 
     public void addTask(Task task) {
@@ -22,10 +32,12 @@ public class TaskList {
     }
 
     public Task deleteTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Index out of bounds";
         return tasks.remove(index);
     }
 
     public Task get(int index) {
+        assert index >= 0 && index < tasks.size() : "Index out of bounds";
         return tasks.get(index);
     }
 
@@ -33,25 +45,19 @@ public class TaskList {
         return tasks.size();
     }
 
-    public void printList() {
-        System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + "." + tasks.get(i));
-        }
-    }
-
-    // Helper to give access to the raw list for storage
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return tasks;
     }
 
-    public static java.util.ArrayList<Task> findTasks(String keyword) {
-        java.util.ArrayList<Task> matchingTasks = new java.util.ArrayList<>();
-        for (Task task : tasks) {
-            if (task.toString().contains(keyword)) {
-                matchingTasks.add(task);
-            }
-        }
-        return matchingTasks;
+    /**
+     * Finds tasks containing the given keyword.
+     *
+     * @param keyword Keyword to search.
+     * @return List of matching tasks.
+     */
+    public List<Task> find(String keyword) {
+        return tasks.stream()
+                .filter(task -> task.toString().contains(keyword))
+                .collect(Collectors.toList());
     }
 }

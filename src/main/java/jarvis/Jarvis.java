@@ -3,41 +3,57 @@ package jarvis;
 import jarvis.parser.CommandType;
 import jarvis.parser.Parser;
 import jarvis.storage.Storage;
-import jarvis.tasks.*;
+import jarvis.tasks.Deadline;
+import jarvis.tasks.Event;
+import jarvis.tasks.Task;
+import jarvis.tasks.TaskList;
+import jarvis.tasks.Todo;
 import jarvis.ui.Ui;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 /**
- * jarvis.Jarvis is a personal assistant chatbot that helps users track tasks.
- * It supports ToDo, jarvis.tasks.Deadline, and jarvis.tasks.Event tasks, and saves data to a local file.
+ * Jarvis is a personal assistant chatbot that helps users manage tasks.
+ * It supports Todo, Deadline, and Event tasks and persists data to disk.
  */
-
 public class Jarvis {
-    private Storage storage;
-    private TaskList tasks;
-    private Ui ui;
 
+    private final Storage storage;
+    private final TaskList tasks;
+    private final Ui ui;
+
+    /**
+     * Creates a Jarvis chatbot with the specified file path.
+     *
+     * @param filePath Path to the data file.
+     */
     public Jarvis(String filePath) {
-        ui = new Ui();
-        storage = new Storage(filePath);
+        this.ui = new Ui();
+        this.storage = new Storage(filePath);
+
+        TaskList loadedTasks;
         try {
-            tasks = new TaskList(storage.load());
+            loadedTasks = new TaskList(storage.load());
         } catch (FileNotFoundException e) {
             ui.showLoadingError();
-            tasks = new TaskList();
+            loadedTasks = new TaskList();
         }
+        this.tasks = loadedTasks;
     }
 
+    /**
+     * Runs the main interaction loop of the chatbot.
+     */
     public void run() {
         ui.showWelcome();
         boolean isExit = false;
 
         while (!isExit) {
-            String fullCommand = ui.readCommand();
+            String input = ui.readCommand();
             ui.showLine();
 
-            CommandType command = Parser.parseCommand(fullCommand);
+            CommandType command = Parser.parseCommand(input);
 
             try {
                 switch (command) {
@@ -45,94 +61,99 @@ public class Jarvis {
                         isExit = true;
                         break;
                     case LIST:
-                        tasks.printList();
+                        ui.showTaskList(tasks.getAllTasks());
                         break;
                     case MARK:
-                        int markIndex = Parser.parseIndex(fullCommand);
-                        tasks.get(markIndex).markAsDone();
-                        System.out.println("Nice! I've marked this task as done:");
-                        System.out.println("  " + tasks.get(markIndex));
-                        storage.save(tasks.getAllTasks());
+                        handleMark(input);
                         break;
                     case UNMARK:
-                        int unmarkIndex = Parser.parseIndex(fullCommand);
-                        tasks.get(unmarkIndex).markAsNotDone();
-                        System.out.println("OK, I've marked this task as not done yet:");
-                        System.out.println("  " + tasks.get(unmarkIndex));
-                        storage.save(tasks.getAllTasks());
+                        handleUnmark(input);
                         break;
                     case DELETE:
-                        int delIndex = Parser.parseIndex(fullCommand);
-                        Task deleted = tasks.deleteTask(delIndex);
-                        ui.showTaskRemoved(deleted, tasks.size());
-                        storage.save(tasks.getAllTasks());
+                        handleDelete(input);
                         break;
                     case TODO:
-                        if (fullCommand.trim().equals("todo")) throw new JarvisException("OOPS!!! Empty todo.");
-                        Task todo = new Todo(fullCommand.substring(5).trim());
-                        tasks.addTask(todo);
-                        ui.showTaskAdded(todo, tasks.size());
-                        storage.save(tasks.getAllTasks());
+                        handleTodo(input);
                         break;
                     case DEADLINE:
-                        if (fullCommand.trim().equals("deadline")) throw new JarvisException("OOPS!!! Empty deadline.");
-                        String[] dParts = fullCommand.substring(9).split(" /by ");
-                        Task deadline = new Deadline(dParts[0].trim(), dParts[1].trim());
-                        tasks.addTask(deadline);
-                        ui.showTaskAdded(deadline, tasks.size());
-                        storage.save(tasks.getAllTasks());
+                        handleDeadline(input);
                         break;
                     case EVENT:
-                        if (fullCommand.trim().equals("event")) throw new JarvisException("OOPS!!! Empty event.");
-                        String[] eParts = fullCommand.substring(6).split(" /from ");
-                        String[] tParts = eParts[1].split(" /to ");
-                        Task event = new Event(eParts[0].trim(), tParts[0].trim(), tParts[1].trim());
-                        tasks.addTask(event);
-                        ui.showTaskAdded(event, tasks.size());
-                        storage.save(tasks.getAllTasks());
+                        handleEvent(input);
                         break;
                     case FIND:
-                        String[] fParts = fullCommand.split(" ", 2);
-                        if (fParts.length < 2 || fParts[1].trim().isEmpty()) {
-                            ui.showError("The search keyword cannot be empty.");
-                        } else {
-                            String keyword = fParts[1].trim();
-                            // Search for tasks
-                            java.util.ArrayList<Task> foundTasks = TaskList.findTasks(keyword);
-                            // Display results
-                            ui.showFindResults(foundTasks);
-                        }
+                        handleFind(input);
                         break;
                     case CHEER:
-                        ui.printCheer(getRandomQuote());
+                        ui.printCheer(storage.getRandomQuote());
                         break;
                     default:
-                        throw new JarvisException("OOPS!!! I'm sorry, but I don't know what that means :-(");
+                        throw new JarvisException("Unknown command.");
                 }
             } catch (JarvisException e) {
                 ui.showError(e.getMessage());
-            } catch (Exception e) {
-                ui.showError("OOPS!!! Something went wrong: " + e.getMessage());
             }
+
             ui.showLine();
         }
+
         ui.showExit();
     }
 
-    private String getRandomQuote() {
-        try {
-            java.util.List<String> lines = java.nio.file.Files.readAllLines(java.nio.file.Paths.get("data/cheer.txt"));
-            if (lines.isEmpty()) {
-                return "You can do it!";
-            }
-            int randomIndex = new java.util.Random().nextInt(lines.size());
-            return lines.get(randomIndex);
-        } catch (java.io.IOException e) {
-            return "Keep pushing forward! (Could not read quote file)";
-        }
+    private void handleMark(String input) {
+        int index = Parser.parseIndex(input);
+        Task task = tasks.get(index);
+        task.markAsDone();
+        storage.save(tasks.getAllTasks());
+        ui.showMark(task);
+    }
+
+    private void handleUnmark(String input) {
+        int index = Parser.parseIndex(input);
+        Task task = tasks.get(index);
+        task.markAsNotDone();
+        storage.save(tasks.getAllTasks());
+        ui.showUnmark(task);
+    }
+
+    private void handleDelete(String input) {
+        int index = Parser.parseIndex(input);
+        Task removed = tasks.deleteTask(index);
+        storage.save(tasks.getAllTasks());
+        ui.showTaskRemoved(removed, tasks.size());
+    }
+
+    private void handleTodo(String input) {
+        String description = Parser.parseDescription(input);
+        Task todo = new Todo(description);
+        tasks.addTask(todo);
+        storage.save(tasks.getAllTasks());
+        ui.showTaskAdded(todo, tasks.size());
+    }
+
+    private void handleDeadline(String input) {
+        String[] parts = Parser.parseDeadline(input);
+        Task deadline = new Deadline(parts[0], parts[1]);
+        tasks.addTask(deadline);
+        storage.save(tasks.getAllTasks());
+        ui.showTaskAdded(deadline, tasks.size());
+    }
+
+    private void handleEvent(String input) {
+        String[] parts = Parser.parseEvent(input);
+        Task event = new Event(parts[0], parts[1], parts[2]);
+        tasks.addTask(event);
+        storage.save(tasks.getAllTasks());
+        ui.showTaskAdded(event, tasks.size());
+    }
+
+    private void handleFind(String input) {
+        String keyword = Parser.parseFindKeyword(input);
+        List<Task> results = tasks.find(keyword);
+        ui.showFindResults(results);
     }
 
     public static void main(String[] args) {
-        new Jarvis("./data/jarvis.txt").run();
+        new Jarvis("data/jarvis.txt").run();
     }
 }

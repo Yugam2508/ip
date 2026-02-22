@@ -1,8 +1,12 @@
 package jarvis.tasks;
 
+/**
+ * Represents an event task.
+ */
 public class Event extends Task {
-    protected String from;
-    protected String to;
+
+    private final String from;
+    private final String to;
 
     public Event(String description, String from, String to) {
         super(description);
@@ -12,11 +16,13 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        return "[E]" + super.toString()
+                + " (from: " + from + " to: " + to + ")";
     }
 
     @Override
     public String toFileFormat() {
-        return "E | " + super.toFileFormat() + " | " + from + " | " + to;
+        return "E | " + super.toFileFormat()
+                + " | " + from + " | " + to;
     }
 }
