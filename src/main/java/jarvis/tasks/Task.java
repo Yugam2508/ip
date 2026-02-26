@@ -1,41 +1,61 @@
 package jarvis.tasks;
 
 /**
- * Represents a generic task.
+ * Represents a task with a description and completion status.
  */
 public class Task {
-
-    protected final String description;
+    protected String description;
     protected boolean isDone;
 
     /**
-     * Creates a task with a description.
+     * Constructs a Task with the given description.
      *
-     * @param description Task description.
+     * @param description The description of the task.
      */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
     }
 
+    /**
+     * Returns the status icon of the task.
+     *
+     * @return "X" if done, " " if not done.
+     */
     public String getStatusIcon() {
-        return isDone ? "X" : " ";
+        return (isDone ? "X" : " ");
     }
 
+    /**
+     * Marks the task as done.
+     */
     public void markAsDone() {
         isDone = true;
     }
 
+    /**
+     * Marks the task as not done.
+     */
     public void markAsNotDone() {
         isDone = false;
     }
 
-    public String toFileFormat() {
-        return (isDone ? "1" : "0") + " | " + description;
-    }
-
+    /**
+     * Returns the string representation of the task.
+     *
+     * @return The string representation.
+     */
     @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + description;
+    }
+
+    /**
+     * Returns the file format representation of the task.
+     *
+     * @return The file format string.
+     */
+    public String toFileFormat() {
+        return " | " + (isDone ? "1" : "0") + " | " + description;
     }
 }
