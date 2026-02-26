@@ -1,7 +1,7 @@
 package jarvis.parser;
 
 /**
- * Represents all supported command types in the Jarvis application.
+ * Enum to represent the various commands the user can input.
  */
 public enum CommandType {
     TODO,
