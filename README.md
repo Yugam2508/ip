@@ -1,44 +1,125 @@
-# Duke project template
+# Jarvis - Personal Task Manager
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Jarvis is a personal assistant chatbot designed to help you manage your tasks efficiently. It supports ToDo tasks, Deadlines, and Events, with persistent storage and smart search capabilities.
 
-## Setting up in IntelliJ
+## Features
 
-Prerequisites: JDK 21.
+- **Task Management**: Add, delete, and mark tasks as complete
+- **Multiple Task Types**: Support for ToDo, Deadline, and Event tasks
+- **Date Handling**: Smart date parsing with LocalDate
+- **Search Functionality**: Find tasks by keyword
+- **Persistent Storage**: Automatic save and load from file
+- **Motivational Quotes**: Get random motivational quotes with the cheer command
 
-1. Open IntelliJ (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into IntelliJ as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 21** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+## Quick Start
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+1. Ensure you have Java 21 installed
+2. Download the latest release JAR file
+3. Run the application: `java -jar jarvis.jar`
+4. Start managing your tasks!
 
-## Running Tests
+## Usage Examples
 
-The project comes with a set of test scripts for different operating systems:
+**Add a todo:**
+```
+todo Read a book
+```
 
-- **MacOS/Linux**: Run the shell script
-  ```bash
-  cd text-ui-test
-  ./runtest.sh
-  ```
+**Add a deadline:**
+```
+deadline Submit report /by 2024-03-15
+```
 
-- **Windows**: Run the batch script
-  ```batch
-  cd text-ui-test
-  runtest.bat
-  ```
+**Add an event:**
+```
+event Team meeting /from 2024-03-10 2pm /to 2024-03-10 4pm
+```
 
-These scripts will compile the source files, run the tests, and compare the output against the expected output.
+**List all tasks:**
+```
+list
+```
+
+**Find tasks:**
+```
+find book
+```
+
+**Mark task as done:**
+```
+mark 1
+```
+
+**Delete a task:**
+```
+delete 2
+```
+
+**Get motivation:**
+```
+cheer
+```
+
+**Exit:**
+```
+bye
+```
+
+## Building from Source
+
+**Prerequisites:**
+- JDK 21
+- Gradle
+
+**Build commands:**
+
+Build the project:
+```
+./gradlew build
+```
+
+Run tests:
+```
+./gradlew test
+```
+
+Create JAR file:
+```
+./gradlew shadowJar
+```
+
+The JAR file will be created in `build/libs/`
+
+## Project Structure
+```
+src/
+├── main/
+│   └── java/
+│       └── jarvis/
+│           ├── Jarvis.java          (Main class)
+│           ├── parser/
+│           │   ├── Parser.java
+│           │   └── CommandType.java
+│           ├── storage/
+│           │   └── Storage.java
+│           ├── tasks/
+│           │   ├── Task.java
+│           │   ├── Todo.java
+│           │   ├── Deadline.java
+│           │   ├── Event.java
+│           │   ├── TaskList.java
+│           │   └── JarvisException.java
+│           └── ui/
+│               └── Ui.java
+└── test/
+```
+
+## Acknowledgements
+
+- Based on the CS2103DE Individual Project
+- SE-EDU coding standards
+- Java LocalDate documentation
+
+---
+
+*Project for CS2103DE Software Engineering*
