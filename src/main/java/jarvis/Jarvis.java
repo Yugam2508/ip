@@ -49,6 +49,10 @@ public class Jarvis {
      * Continuously reads user commands and executes them until the user exits.
      */
     public void run() {
+        assert ui != null : "Ui should be initialized";
+        assert storage != null : "Storage should be initialized";
+        assert tasks != null : "TaskList should be initialized";
+
         ui.showWelcome();
         boolean isExit = false;
 
