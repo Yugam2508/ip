@@ -1,4 +1,15 @@
-Debugging is like being the detective in a crime movie where you are also the murderer.
-It works on my machine!
-Code is like humor. When you have to explain it, it’s bad.
-Keep calm and commit often.
+Keep going – even the best programmers started out writing 'Hello World'!
+Every bug you fix makes you a better developer!
+The code you write today is better than the code you wrote yesterday!
+Debugging is just being the detective in a crime movie where you're also the murderer!
+It's not a bug, it's an undocumented feature!
+Code never lies, comments sometimes do!
+There are only two hard things in Computer Science: cache invalidation and naming things!
+Talk is cheap. Show me the code!
+First, solve the problem. Then, write the code!
+Simplicity is the soul of efficiency!
+Make it work, make it right, make it fast!
+Any fool can write code that a computer can understand. Good programmers write code that humans can understand!
+The best error message is the one that never shows up!
+Programming isn't about what you know; it's about what you can figure out!
+Code is like humor. When you have to explain it, it's bad!

@@ -1,15 +1,14 @@
-package jarvis;
+package jarvis.tasks;
 
 /**
- * Represents a custom exception thrown by the Jarvis application
- * when user input is invalid or a command cannot be processed.
+ * Represents exceptions specific to the Jarvis application.
  */
 public class JarvisException extends Exception {
 
     /**
-     * Creates a JarvisException with the specified message.
+     * Constructs a JarvisException with the specified message.
      *
-     * @param message Error message.
+     * @param message The error message.
      */
     public JarvisException(String message) {
         super(message);
