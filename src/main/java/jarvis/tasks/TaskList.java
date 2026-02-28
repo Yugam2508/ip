@@ -1,6 +1,7 @@
 package jarvis.tasks;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Represents a list of tasks and provides operations to manage them.
@@ -93,12 +94,8 @@ public class TaskList {
      * @return An ArrayList of matching tasks.
      */
     public ArrayList<Task> findTasks(String keyword) {
-        ArrayList<Task> foundTasks = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.description.contains(keyword)) {
-                foundTasks.add(task);
-            }
-        }
-        return foundTasks;
+        return tasks.stream()
+                .filter(task -> task.description.contains(keyword))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }
