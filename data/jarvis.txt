@@ -1,5 +1,0 @@
-D | 0 | finish homework | Sunday
-T | 0 | task
-T | 0 | read book
-T | 0 | return book
-T | 0 | eat apple

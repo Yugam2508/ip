@@ -151,6 +151,102 @@ public class Jarvis {
     }
 
     /**
+     * Generates a response for the given user input.
+     *
+     * @param input The user's input command.
+     * @return The response from Jarvis.
+     */
+    public String getResponse(String input) {
+        CommandType command = Parser.parseCommand(input);
+        StringBuilder response = new StringBuilder();
+
+        try {
+            switch (command) {
+            case BYE:
+                return "Bye. Hope to see you again soon!";
+            case LIST:
+                if (tasks.size() == 0) {
+                    return "No tasks in your list yet!";
+                }
+                response.append("Here are the tasks in your list:\n");
+                for (int i = 0; i < tasks.size(); i++) {
+                    response.append((i + 1)).append(".").append(tasks.get(i)).append("\n");
+                }
+                return response.toString();
+            case MARK:
+                int markIndex = Parser.parseIndex(input);
+                tasks.get(markIndex).markAsDone();
+                storage.save(tasks.getAllTasks());
+                return "Nice! I've marked this task as done:\n  " + tasks.get(markIndex);
+            case UNMARK:
+                int unmarkIndex = Parser.parseIndex(input);
+                tasks.get(unmarkIndex).markAsNotDone();
+                storage.save(tasks.getAllTasks());
+                return "OK, I've marked this task as not done yet:\n  " + tasks.get(unmarkIndex);
+            case DELETE:
+                int delIndex = Parser.parseIndex(input);
+                Task deleted = tasks.deleteTask(delIndex);
+                storage.save(tasks.getAllTasks());
+                return "Noted. I've removed this task:\n  " + deleted
+                        + "\nNow you have " + tasks.size() + " tasks in the list.";
+            case TODO:
+                if (input.trim().equals("todo")) {
+                    throw new JarvisException("OOPS!!! Empty todo.");
+                }
+                Task todo = new Todo(input.substring(5).trim());
+                tasks.addTask(todo);
+                storage.save(tasks.getAllTasks());
+                return "Got it. I've added this task:\n  " + todo
+                        + "\nNow you have " + tasks.size() + " tasks in the list.";
+            case DEADLINE:
+                if (input.trim().equals("deadline")) {
+                    throw new JarvisException("OOPS!!! Empty deadline.");
+                }
+                String[] dParts = input.substring(9).split(" /by ");
+                Task deadline = new Deadline(dParts[0].trim(), dParts[1].trim());
+                tasks.addTask(deadline);
+                storage.save(tasks.getAllTasks());
+                return "Got it. I've added this task:\n  " + deadline
+                        + "\nNow you have " + tasks.size() + " tasks in the list.";
+            case EVENT:
+                if (input.trim().equals("event")) {
+                    throw new JarvisException("OOPS!!! Empty event.");
+                }
+                String[] eParts = input.substring(6).split(" /from ");
+                String[] tParts = eParts[1].split(" /to ");
+                Task event = new Event(eParts[0].trim(), tParts[0].trim(), tParts[1].trim());
+                tasks.addTask(event);
+                storage.save(tasks.getAllTasks());
+                return "Got it. I've added this task:\n  " + event
+                        + "\nNow you have " + tasks.size() + " tasks in the list.";
+            case FIND:
+                String[] fParts = input.split(" ", 2);
+                if (fParts.length < 2 || fParts[1].trim().isEmpty()) {
+                    return "The search keyword cannot be empty.";
+                }
+                String keyword = fParts[1].trim();
+                ArrayList<Task> foundTasks = tasks.findTasks(keyword);
+                if (foundTasks.isEmpty()) {
+                    return "No matching tasks found.";
+                }
+                response.append("Here are the matching tasks in your list:\n");
+                for (int i = 0; i < foundTasks.size(); i++) {
+                    response.append((i + 1)).append(".").append(foundTasks.get(i)).append("\n");
+                }
+                return response.toString();
+            case CHEER:
+                return getRandomQuote();
+            default:
+                throw new JarvisException("OOPS!!! I'm sorry, but I don't know what that means :-(");
+            }
+        } catch (JarvisException e) {
+            return e.getMessage();
+        } catch (Exception e) {
+            return "OOPS!!! Something went wrong: " + e.getMessage();
+        }
+    }
+
+    /**
      * Retrieves a random motivational quote from the cheer.txt file.
      *
      * @return A random motivational quote, or a default message if file cannot be read.
