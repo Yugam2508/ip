@@ -52,6 +52,7 @@ public class Jarvis {
         assert ui != null : "Ui should be initialized";
         assert storage != null : "Storage should be initialized";
         assert tasks != null : "TaskList should be initialized";
+        assert !tasks.getAllTasks().getClass().equals(null) : "Tasks list should be valid";
 
         ui.showWelcome();
         boolean isExit = false;
