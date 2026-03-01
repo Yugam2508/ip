@@ -2,6 +2,7 @@ package jarvis.tasks;
 
 /**
  * Represents a task with a description and completion status.
+ * This class serves as the base class for all task types.
  */
 public class Task {
     protected String description;
