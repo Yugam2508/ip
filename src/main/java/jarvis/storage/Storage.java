@@ -29,6 +29,8 @@ public class Storage {
 
     /**
      * Loads tasks from the file.
+     * Creates parent directories if they don't exist.
+     * Returns empty list if file is not found.
      *
      * @return An ArrayList of tasks loaded from the file.
      * @throws FileNotFoundException If the file does not exist.
