@@ -46,7 +46,9 @@ public class Parser {
      * @return The zero-based index of the task.
      */
     public static int parseIndex(String fullCommand) {
+        assert fullCommand != null && !fullCommand.isEmpty() : "Command cannot be null or empty";
         String[] parts = fullCommand.split(" ");
+        assert parts.length >= 2 : "Command must have an index";
         return Integer.parseInt(parts[1]) - 1;
     }
 }
