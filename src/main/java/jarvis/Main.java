@@ -23,23 +23,33 @@ public class Main extends Application {
     private Button sendButton;
     private Scene scene;
 
+    /**
+     * Initializes and displays the JavaFX GUI.
+     * Sets up the layout, styling, and event handlers for the application.
+     *
+     * @param stage The primary stage for this application.
+     */
     @Override
     public void start(Stage stage) {
         scrollPane = new ScrollPane();
         dialogContainer = new VBox();
         dialogContainer.setSpacing(10);
+        dialogContainer.setStyle("-fx-padding: 10;");
         scrollPane.setContent(dialogContainer);
 
         userInput = new TextField();
+        userInput.setPromptText("Enter command here...");
         sendButton = new Button("Send");
+        sendButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
 
         AnchorPane mainLayout = new AnchorPane();
         mainLayout.getChildren().addAll(scrollPane, userInput, sendButton);
+        mainLayout.setStyle("-fx-background-color: #f5f5f5;");
 
         scene = new Scene(mainLayout);
 
         stage.setScene(scene);
-        stage.setTitle("Jarvis");
+        stage.setTitle("Jarvis Task Manager");
         stage.setMinHeight(600);
         stage.setMinWidth(400);
 
@@ -49,6 +59,7 @@ public class Main extends Application {
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setVvalue(1.0);
         scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: #f5f5f5;");
 
         dialogContainer.setPrefHeight(Region.USE_COMPUTED_SIZE);
 
@@ -62,6 +73,7 @@ public class Main extends Application {
         AnchorPane.setBottomAnchor(userInput, 1.0);
 
         Label welcomeLabel = new Label("Hello! I'm Jarvis\nWhat can I do for you?");
+        welcomeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #2196F3; -fx-font-weight: bold;");
         dialogContainer.getChildren().add(welcomeLabel);
 
         sendButton.setOnMouseClicked((event) -> {
@@ -87,10 +99,18 @@ public class Main extends Application {
         }
 
         Label userLabel = new Label("You: " + input);
+        userLabel.setStyle("-fx-background-color: #E3F2FD; -fx-padding: 8; -fx-background-radius: 5;");
         dialogContainer.getChildren().add(userLabel);
 
         String response = getResponse(input);
         Label jarvisLabel = new Label("Jarvis: " + response);
+
+        if (response.startsWith("OOPS") || response.startsWith("Error")) {
+            jarvisLabel.setStyle("-fx-background-color: #FFEBEE; -fx-padding: 8; -fx-background-radius: 5; -fx-text-fill: #C62828;");
+        } else {
+            jarvisLabel.setStyle("-fx-background-color: #E8F5E9; -fx-padding: 8; -fx-background-radius: 5;");
+        }
+
         dialogContainer.getChildren().add(jarvisLabel);
 
         userInput.clear();
