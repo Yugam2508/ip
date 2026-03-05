@@ -2,7 +2,7 @@
 
 ![Jarvis UI](Ui.png)
 
-Jarvis is a personal task management assistant that helps you keep track of your todos, deadlines, and events through an intuitive graphical interface.
+Jarvis is a professional task management assistant with a polished graphical interface featuring color-coded messages and intuitive controls.
 
 ## Quick Start
 
