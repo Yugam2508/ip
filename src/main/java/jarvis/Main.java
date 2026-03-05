@@ -72,7 +72,7 @@ public class Main extends Application {
         AnchorPane.setLeftAnchor(userInput, 1.0);
         AnchorPane.setBottomAnchor(userInput, 1.0);
 
-        Label welcomeLabel = new Label("Hello! I'm Jarvis\nWhat can I do for you?");
+        Label welcomeLabel = new Label("Good day, sir. I'm Jarvis.\nHow may I assist you today?");
         welcomeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #2196F3; -fx-font-weight: bold;");
         dialogContainer.getChildren().add(welcomeLabel);
 
