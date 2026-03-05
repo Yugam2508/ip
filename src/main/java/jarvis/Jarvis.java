@@ -175,18 +175,30 @@ public class Jarvis {
                 return response.toString();
             case MARK:
                 int markIndex = Parser.parseIndex(input);
+                if (markIndex >= tasks.size()) {
+                    throw new JarvisException("Task number " + (markIndex + 1)
+                            + " doesn't exist, sir. You have " + tasks.size() + " tasks.");
+                }
                 tasks.get(markIndex).markAsDone();
                 storage.save(tasks.getAllTasks());
                 return "Excellent work, sir. I've marked this task as complete:\n  "
                         + tasks.get(markIndex);
             case UNMARK:
                 int unmarkIndex = Parser.parseIndex(input);
+                if (unmarkIndex >= tasks.size()) {
+                    throw new JarvisException("Task number " + (unmarkIndex + 1)
+                            + " doesn't exist, sir. You have " + tasks.size() + " tasks.");
+                }
                 tasks.get(unmarkIndex).markAsNotDone();
                 storage.save(tasks.getAllTasks());
                 return "Understood, sir. I've unmarked this task:\n  "
                         + tasks.get(unmarkIndex);
             case DELETE:
                 int delIndex = Parser.parseIndex(input);
+                if (delIndex >= tasks.size()) {
+                    throw new JarvisException("Task number " + (delIndex + 1)
+                            + " doesn't exist, sir. You have " + tasks.size() + " tasks.");
+                }
                 Task deleted = tasks.deleteTask(delIndex);
                 storage.save(tasks.getAllTasks());
                 return "Task removed from your schedule, sir:\n  " + deleted
@@ -205,6 +217,10 @@ public class Jarvis {
                     throw new JarvisException("OOPS!!! I need a deadline description, sir.");
                 }
                 String[] dParts = input.substring(9).split(" /by ");
+                if (dParts.length < 2 || dParts[1].trim().isEmpty()) {
+                    throw new JarvisException(
+                            "Please specify a deadline using /by, sir.\nExample: deadline return book /by 2024-12-25");
+                }
                 Task deadline = new Deadline(dParts[0].trim(), dParts[1].trim());
                 tasks.addTask(deadline);
                 storage.save(tasks.getAllTasks());
@@ -215,7 +231,15 @@ public class Jarvis {
                     throw new JarvisException("OOPS!!! I need event details, sir.");
                 }
                 String[] eParts = input.substring(6).split(" /from ");
+                if (eParts.length < 2) {
+                    throw new JarvisException(
+                            "Please specify start time using /from, sir.\nExample: event meeting /from 2pm /to 4pm");
+                }
                 String[] tParts = eParts[1].split(" /to ");
+                if (tParts.length < 2 || tParts[1].trim().isEmpty()) {
+                    throw new JarvisException(
+                            "Please specify end time using /to, sir.\nExample: event meeting /from 2pm /to 4pm");
+                }
                 Task event = new Event(eParts[0].trim(), tParts[0].trim(), tParts[1].trim());
                 tasks.addTask(event);
                 storage.save(tasks.getAllTasks());

@@ -1,4 +1,5 @@
 package jarvis.parser;
+import jarvis.tasks.JarvisException;
 
 /**
  * Parses user input commands and extracts relevant information.
@@ -45,10 +46,29 @@ public class Parser {
      * @param fullCommand The full command string containing the index.
      * @return The zero-based index of the task.
      */
-    public static int parseIndex(String fullCommand) {
+    /**
+     * Extracts the task index from a command string.
+     *
+     * @param fullCommand The full command string containing the index.
+     * @return The zero-based index of the task.
+     * @throws JarvisException If index is missing or invalid.
+     */
+    public static int parseIndex(String fullCommand) throws JarvisException {
         assert fullCommand != null && !fullCommand.isEmpty() : "Command cannot be null or empty";
         String[] parts = fullCommand.split(" ");
-        assert parts.length >= 2 : "Command must have an index";
-        return Integer.parseInt(parts[1]) - 1;
+
+        if (parts.length < 2) {
+            throw new JarvisException("Please specify which task number to modify, sir.");
+        }
+
+        try {
+            int index = Integer.parseInt(parts[1]) - 1;
+            if (index < 0) {
+                throw new JarvisException("Task number must be positive, sir.");
+            }
+            return index;
+        } catch (NumberFormatException e) {
+            throw new JarvisException("Invalid task number, sir. Please use a number.");
+        }
     }
 }
