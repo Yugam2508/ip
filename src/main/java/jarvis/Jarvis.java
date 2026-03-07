@@ -262,6 +262,8 @@ public class Jarvis {
                 return response.toString();
             case CHEER:
                 return "A bit of motivation for you, sir:\n\"" + getRandomQuote() + "\"";
+            case HELP:
+                return getHelpMessage();
             default:
                 throw new JarvisException(
                         "I'm afraid I don't understand that command, sir.");
@@ -271,6 +273,26 @@ public class Jarvis {
         } catch (Exception e) {
             return "Something went wrong, sir: " + e.getMessage();
         }
+    }
+
+    /**
+     * Returns a help message listing all available commands.
+     *
+     * @return The help message with command descriptions.
+     */
+    private String getHelpMessage() {
+        return "Here are the commands I understand, sir:\n\n"
+                + "todo TASK - Add a simple task\n"
+                + "deadline TASK /by DATE - Add a task with deadline\n"
+                + "event TASK /from START /to END - Add an event\n"
+                + "list - Show all tasks\n"
+                + "mark NUMBER - Mark task as done\n"
+                + "unmark NUMBER - Mark task as not done\n"
+                + "delete NUMBER - Remove a task\n"
+                + "find KEYWORD - Search for tasks\n"
+                + "cheer - Get motivational quote\n"
+                + "help - Show this message\n"
+                + "bye - Exit the application";
     }
 
     /**

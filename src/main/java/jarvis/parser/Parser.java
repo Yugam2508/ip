@@ -35,6 +35,8 @@ public class Parser {
             return CommandType.FIND;
         case "cheer":
             return CommandType.CHEER;
+        case "help":
+            return CommandType.HELP;
         default:
             return CommandType.UNKNOWN;
         }

@@ -14,5 +14,6 @@ public enum CommandType {
     BYE,
     FIND,
     CHEER,
+    HELP,
     UNKNOWN
 }
