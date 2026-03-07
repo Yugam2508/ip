@@ -2,6 +2,7 @@ package jarvis.parser;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import jarvis.tasks.JarvisException;
 
 /**
  * JUnit test class for Parser functionality.
@@ -57,7 +58,7 @@ public class ParserTest {
      * Tests that parseIndex extracts correct index.
      */
     @Test
-    public void testParseIndex() {
+    public void testParseIndex() throws JarvisException{
         int result = Parser.parseIndex("mark 3");
         assertEquals(2, result);
     }
@@ -66,7 +67,7 @@ public class ParserTest {
      * Tests that parseIndex works with delete command.
      */
     @Test
-    public void testParseIndexDelete() {
+    public void testParseIndexDelete() throws JarvisException{
         int result = Parser.parseIndex("delete 5");
         assertEquals(4, result);
     }
